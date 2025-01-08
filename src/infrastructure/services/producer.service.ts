@@ -30,17 +30,10 @@ export class ProducerService {
             }
 
             if (producerIntervals.length > 0) {
-                const minInterval = producerIntervals.reduce(
-                    (a, b) => (a.interval < b.interval ? a : b),
-                    producerIntervals[0]
-                );
-                const maxInterval = producerIntervals.reduce(
-                    (a, b) => (a.interval > b.interval ? a : b),
-                    producerIntervals[0]
-                );
-
-                intervals.min.push(minInterval);
-                intervals.max.push(maxInterval);
+                producerIntervals.forEach(interval => {
+                    intervals.min.push(interval);
+                    intervals.max.push(interval);
+                });
             }
         });
         //Encontra menor e maior

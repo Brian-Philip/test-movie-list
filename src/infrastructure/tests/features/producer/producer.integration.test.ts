@@ -1,13 +1,30 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-
+import { Server } from 'http';
+import { App } from '../../../../app';
+import { Initialize } from '../../../database/main';
 chai.use(chaiHttp);
 chai.should();
 
 describe('Producer - Endpoint', () => {
+    let server: Server;
+
+    before(async () => {
+        await Initialize();
+        server = App.listen(3000, () => {
+            console.log(`Server listening on 3000`, new Date().toISOString());
+        });
+    });
+
+    after(done => {
+        server.close(() => {
+            console.log('Test server closed');
+            done();
+        });
+    });
     describe('GET /producer/getIntervalWinners', () => {
         it('should return the correct min and max interval winners', done => {
-            chai.request('http://localhost:3000').get('/producer/getIntervalWinners')
+            chai.request(App).get('/producer/getIntervalWinners')
                 .end((err: any, res: any) => {
                     res.should.have.status(200);
                     chai.assert.isNull(err);
